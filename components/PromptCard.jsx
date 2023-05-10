@@ -23,10 +23,9 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   // to nvaigate the user to the profile page whether it is their own or other users
   function handleProfileClick(){
     // if the user clicked is his own profile then it will be routed to his own profile
-   if(post.creator._id === session?.user?.id) router.push("/profile");
-
-  //  else it will be routed to the other user's profile
-   router.push(`/profile/${post.creator._id}?name=${post.creator.username}`)
+   post.creator._id === session?.user?.id ? router.push("/profile") : 
+   router.push(`/profile/${post.creator._id}?name=${post.creator.username}`)  //  else it will be routed to the other user's profile
+  
   } 
   
   return (
