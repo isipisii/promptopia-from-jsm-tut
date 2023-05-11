@@ -12,7 +12,11 @@ const PromptSchema = new Schema({
   tag: {
     type: String,
     required: [true, "Tag is required!"],
-  }
+  },
+  like: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const Prompt = models.Prompt || model("Prompt", PromptSchema);
