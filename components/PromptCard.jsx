@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -10,17 +10,12 @@ const PromptCard = ({
   handleTagClick,
   handleEdit,
   handleDelete,
-  addLike,
 }) => {
   const [copied, setCopied] = useState("");
   const { data: session } = useSession();
-  // const [likeCount, setLikeCount] = useState(post.like);
+  const [likeCount, setLikeCount] = useState(post.like);
   const pathName = usePathname();
   const router = useRouter();
-
-  // useEffect(() => {
-  //   setLikeCount(post.like);
-  // }, [post.like]);
 
   // copy to clipboard
   function handleCopy() {
@@ -39,6 +34,17 @@ const PromptCard = ({
       : router.push(
           `/profile/${post.creator._id}?name=${post.creator.username}`
         ); //  else it will be routed to the other user's profile
+  }
+
+  async function likeAndDislikePost(post) {
+    const response = await fetch(`/api/like-prompt/${post._id}`, {
+      method: "POST",
+      body: JSON.stringify({ userId: session?.user?.id }), 
+    });
+    if (response.ok) {
+      const updatedPost = await response.json();
+      setLikeCount(updatedPost.like);
+    }
   }
 
   return (
@@ -85,7 +91,7 @@ const PromptCard = ({
         #{post.tag}
       </p>
 
-      <button onClick={() => addLike(post)}>Like {post.like}</button>
+      <button onClick={() => likeAndDislikePost(post)}>Like {likeCount}</button>
 
       {/* will only render whenever it is in profile path and the session id is the same with creator id */}
       {session?.user?.id === post.creator._id && pathName === "/profile" && (
