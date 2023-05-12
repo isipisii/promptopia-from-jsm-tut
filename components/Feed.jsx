@@ -8,7 +8,6 @@ const PromptCardList = ({
   handleTagClick,
   searchText,
   searchedPosts,
-  addLike
 }) => {
   return (
     <div className="mt-16 prompt_layout">
@@ -17,7 +16,6 @@ const PromptCardList = ({
           key={post._id}
           post={post}
           handleTagClick={handleTagClick}
-          addLike={addLike}
         />
       ))}
     </div>
@@ -37,15 +35,6 @@ const Feed = () => {
     filterSearch();
   }
 
-  async function addLike(post) {
-    const response = await fetch(`/api/like-prompt/${post._id}`, {
-      method: "POST",
-    });
-    console.log(response);
-    if (response.ok) {
-      alert("Post liked successfully");
-    }
-  }
 
   // filter the posts based on the search text
   function filterSearch() {
@@ -77,7 +66,7 @@ const Feed = () => {
       setPosts(data);
     };
     fetchPosts();
-  }, [addLike]);
+  }, []);
 
   return (
     <section className="feed">
@@ -92,7 +81,6 @@ const Feed = () => {
         />
       </form>
       <PromptCardList
-        addLike={addLike}
         data={posts}
         searchedPosts={searchedPosts}
         searchText={searchText}
